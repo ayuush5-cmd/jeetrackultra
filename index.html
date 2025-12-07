@@ -1,849 +1,972 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>My JEE Prep Planner</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>Study & Practice Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      background: #0b0f19;
+      color: #f5f5f5;
     }
     header {
+      padding: 16px 20px;
       background: #111827;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       border-bottom: 1px solid #1f2937;
-      position: sticky;
-      top: 0;
-      z-index: 10;
     }
-    header h1 { font-size: 1.35rem; color: #f9fafb; }
-    header span { font-size: 0.9rem; color: #9ca3af; }
-    main { max-width: 1100px; margin: 1.5rem auto; padding: 0 1rem 2rem; }
-    .tabs {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
     }
-    .tab-btn {
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      border: 1px solid #374151;
-      background: #020617;
-      color: #d1d5db;
-      cursor: pointer;
-      font-size: 0.85rem;
+    header p {
+      margin: 4px 0 0;
+      font-size: 0.9rem;
+      color: #9ca3af;
     }
-    .tab-btn.active {
-      background: #2563eb;
-      border-color: #2563eb;
-      color: #f9fafb;
+    main {
+      padding: 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h2, h3 {
+      margin-top: 0;
+      color: #e5e7eb;
     }
     section {
-      display: none;
-      animation: fade 0.2s ease-out;
+      background: #111827;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      border: 1px solid #1f2937;
     }
-    section.active { display: block; }
-    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
-
     .grid {
       display: grid;
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
     }
-    @media (min-width: 768px) {
-      .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stat-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
     }
-    .card {
-      background: #020617;
-      border-radius: 0.75rem;
-      padding: 1rem;
-      border: 1px solid #1f2937;
+    .stat {
+      flex: 1;
+      min-width: 100px;
     }
-    .card h2 { font-size: 1rem; margin-bottom: 0.6rem; color: #e5e7eb; }
-    .muted { color: #9ca3af; font-size: 0.85rem; }
-    .stat-number {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-top: 0.15rem;
-    }
-    .badge {
-      display: inline-block;
-      border-radius: 999px;
-      padding: 0.1rem 0.5rem;
-      font-size: 0.7rem;
-      background: #111827;
-      border: 1px solid #1f2937;
+    .stat span.label {
+      display: block;
+      font-size: 0.8rem;
       color: #9ca3af;
-      margin-left: 0.4rem;
     }
-    .tag {
-      display: inline-block;
-      padding: 0.1rem 0.45rem;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      background: #111827;
-      color: #d1d5db;
-      margin-right: 0.25rem;
-      margin-top: 0.25rem;
+    .stat span.value {
+      font-size: 1.2rem;
+      font-weight: 600;
     }
-    .tag-phy { border: 1px solid #22c55e33; }
-    .tag-chem { border: 1px solid #eab30833; }
-    .tag-math { border: 1px solid #38bdf833; }
-
-    form {
-      display: grid;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+    label {
+      display: block;
+      margin-top: 8px;
       font-size: 0.85rem;
+      color: #d1d5db;
     }
-    label { display: block; margin-bottom: 0.25rem; }
-    input, select, textarea {
+    input, select, textarea, button {
       width: 100%;
-      padding: 0.4rem 0.5rem;
-      border-radius: 0.4rem;
+      margin-top: 4px;
+      padding: 6px 8px;
+      border-radius: 6px;
       border: 1px solid #374151;
       background: #020617;
       color: #e5e7eb;
-      font-size: 0.85rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      box-sizing: border-box;
     }
-    textarea { min-height: 60px; resize: vertical; }
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
     button {
-      border: none;
-      border-radius: 0.5rem;
-      padding: 0.45rem 0.9rem;
-      background: #2563eb;
-      color: #f9fafb;
-      font-size: 0.85rem;
+      margin-top: 10px;
       cursor: pointer;
+      background: #2563eb;
+      border-color: #2563eb;
+      font-weight: 500;
     }
-    button.secondary {
-      background: #020617;
-      border: 1px solid #4b5563;
-      color: #e5e7eb;
+    button:hover {
+      background: #1d4ed8;
     }
-    button.small { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 0.5rem;
-      font-size: 0.8rem;
+      margin-top: 8px;
+      font-size: 0.85rem;
     }
     th, td {
-      border-bottom: 1px solid #111827;
-      padding: 0.4rem 0.3rem;
+      padding: 6px 8px;
+      border-bottom: 1px solid #1f2937;
       text-align: left;
     }
-    th { color: #9ca3af; font-weight: 500; font-size: 0.78rem; }
-    tr:last-child td { border-bottom: none; }
-    .danger { color: #f97373; }
-    .flex { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
-    .justify-between { justify-content: space-between; }
-    .mt-1 { margin-top: 0.25rem; }
-    .mt-2 { margin-top: 0.5rem; }
-    .mb-1 { margin-bottom: 0.25rem; }
-    .chip {
-      font-size: 0.7rem;
-      padding: 0.1rem 0.5rem;
-      border-radius: 999px;
-      background: #111827;
+    th {
+      background: #020617;
       color: #9ca3af;
+      font-weight: 500;
+    }
+    tr:nth-child(even) td {
+      background: #020617;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+    }
+    .badge-high { background: #b91c1c; color: #fee2e2; }
+    .badge-med { background: #92400e; color: #ffedd5; }
+    .badge-low { background: #065f46; color: #d1fae5; }
+    .tag-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      border: 1px solid #374151;
+      margin-right: 4px;
+    }
+    .muted {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .chip {
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #374151;
+      font-size: 0.75rem;
+      color: #e5e7eb;
+    }
+    #resetAll {
+      background: #dc2626;
+      border-color: #b91c1c;
+    }
+    #resetAll:hover {
+      background: #b91c1c;
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.1rem; }
+      main { padding: 10px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div>
-      <h1>My JEE Prep Planner</h1>
-      <span>Plan syllabus, track topics, tests & progress.</span>
+<header>
+  <h1>JEE Study & Practice Tracker</h1>
+  <p>All data stored locally in your browser. Close tab safely; nothing goes to a server.</p>
+</header>
+
+<main>
+
+  <!-- Today’s Target -->
+  <section>
+    <div class="flex-between">
+      <h2>Today’s Target</h2>
+      <span class="muted" id="todayDate"></span>
     </div>
-    <div>
-      <span class="muted">Days left: <span id="daysLeft">–</span></span>
+    <p class="muted">Focus topics pulled from your pending list. Finish at least one topic per subject daily.</p>
+    <div id="todayTargets" class="chips"></div>
+  </section>
+
+  <!-- Top panels -->
+  <div class="grid">
+
+    <!-- Overall Study Planner -->
+    <section>
+      <h2>Overall Progress</h2>
+      <p class="muted">Quick view of topic completion across Physics, Chemistry and Maths.</p>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="label">Physics</span>
+          <span class="value" id="phyPercent">0%</span>
+        </div>
+        <div class="stat">
+          <span class="label">Chemistry</span>
+          <span class="value" id="chemPercent">0%</span>
+        </div>
+        <div class="stat">
+          <span class="label">Maths</span>
+          <span class="value" id="mathPercent">0%</span>
+        </div>
+      </div>
+      <hr style="border-color:#1f2937;margin:10px 0;">
+      <div class="stat-row">
+        <div class="stat">
+          <span class="label">Total topics</span>
+          <span class="value" id="totalTopics">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Completed</span>
+          <span class="value" id="completedTopics">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Overall %</span>
+          <span class="value" id="overallPercent">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Practice Snapshot -->
+    <section>
+      <h2>Practice Snapshot</h2>
+      <p class="muted">Mocks & PYQs – keep an eye on accuracy and attempts.</p>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="label">Tests logged</span>
+          <span class="value" id="testsLogged">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Avg. score (/300)</span>
+          <span class="value" id="avgScore">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Avg. accuracy (%)</span>
+          <span class="value" id="avgAccuracy">0</span>
+        </div>
+      </div>
+      <hr style="border-color:#1f2937;margin:10px 0;">
+      <div class="stat-row">
+        <div class="stat">
+          <span class="label">Best score</span>
+          <span class="value" id="bestScore">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Worst score</span>
+          <span class="value" id="worstScore">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Recent avg score</span>
+          <span class="value" id="recentAvgScore">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consistency -->
+    <section>
+      <h2>Consistency</h2>
+      <p class="muted">Try not to break your streak.</p>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="label">Current study streak</span>
+          <span class="value" id="streakDays">0 days</span>
+        </div>
+        <div class="stat">
+          <span class="label">Last active</span>
+          <span class="value" id="lastActive">–</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Study planner: add & list topics -->
+  <section>
+    <h2>Add Topic</h2>
+    <p class="muted">Choose subject & chapter; optionally add subtopics.</p>
+
+    <form id="topicForm">
+      <div class="grid">
+        <div>
+          <label>Subject</label>
+          <select id="topicSubject" required>
+            <option value="">Select subject</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Maths">Maths</option>
+          </select>
+        </div>
+        <div>
+          <label>Topic / Chapter</label>
+          <input id="topicName" type="text" placeholder="e.g. Electrostatics" required>
+        </div>
+        <div>
+          <label>Priority</label>
+          <select id="topicPriority" required>
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div>
+          <label>Target date</label>
+          <input id="topicTarget" type="date">
+        </div>
+      </div>
+      <label>Subtopics (optional, comma separated)</label>
+      <input id="topicSubtopics" type="text" placeholder="Kinematics 1D, Kinematics 2D">
+      <button type="submit">Add Topic</button>
+    </form>
+
+    <hr style="border-color:#1f2937;margin:12px 0;">
+
+    <h3>Filter & Quick View</h3>
+    <div class="grid">
+      <div>
+        <label>Subject filter</label>
+        <select id="filterSubject">
+          <option value="All">All</option>
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
+          <option value="Maths">Maths</option>
+        </select>
+      </div>
+      <div>
+        <label>Status filter</label>
+        <select id="filterStatus">
+          <option value="All">All</option>
+          <option value="Pending">Pending</option>
+          <option value="Done">Done</option>
+        </select>
+      </div>
+      <div>
+        <label>Priority filter</label>
+        <select id="filterPriority">
+          <option value="All">All</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
     </div>
-  </header>
 
-  <main>
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-      <button class="tab-btn" data-tab="planner">Study Planner</button>
-      <button class="tab-btn" data-tab="practice">Practice Tracker</button>
-      <button class="tab-btn" data-tab="analysis">Analysis</button>
-      <button class="tab-btn" data-tab="settings">Settings</button>
+    <h3 style="margin-top:12px;">Topic List</h3>
+    <div class="muted">Use the “Mark done” button after you feel confident with a topic.</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Topic</th>
+          <th>Priority</th>
+          <th>Target</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="topicTableBody"></tbody>
+    </table>
+  </section>
+
+  <!-- Practice tracker: tests & mistakes -->
+  <section>
+    <h2>Log Mock / PYQ</h2>
+    <p class="muted">Track each test with score, auto-calculated accuracy, and a short reflection.</p>
+
+    <form id="testForm">
+      <div class="grid">
+        <div>
+          <label>Type</label>
+          <select id="testType" required>
+            <option value="">Select type</option>
+            <option value="Mock">Mock</option>
+            <option value="PYQ">PYQ</option>
+          </select>
+        </div>
+        <div>
+          <label>Score (/300)</label>
+          <input type="number" id="testScore" min="0" max="300" required>
+        </div>
+        <div>
+          <label>Total questions</label>
+          <input type="number" id="testTotalQ" min="1" required>
+        </div>
+        <div>
+          <label>Correct questions</label>
+          <input type="number" id="testCorrectQ" min="0" required>
+        </div>
+        <div>
+          <label>Accuracy (%)</label>
+          <input type="number" id="testAccuracy" readonly>
+        </div>
+      </div>
+      <label>Reflection / mistakes (short)</label>
+      <textarea id="testReflection" placeholder="Key mistakes, chapters to revise, silly errors, guessing, time management, etc."></textarea>
+      <button type="submit">Save Test</button>
+    </form>
+
+    <h3 style="margin-top:16px;">Recent Tests</h3>
+    <p class="muted">Last few entries to quickly recall what to fix.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Score</th>
+          <th>Acc%</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="recentTestsBody"></tbody>
+    </table>
+  </section>
+
+  <section id="mistakeLogSection">
+    <h2>Previously Made Mistakes</h2>
+    <p class="muted">Review this before new tests so you do not repeat the same errors.</p>
+    <ul id="mistakeLogList" class="muted"></ul>
+  </section>
+
+  <!-- Settings & reset -->
+  <section>
+    <h2>Basic Settings</h2>
+    <p class="muted">Set your JEE Main target date and daily dashboard load.</p>
+    <div class="grid">
+      <div>
+        <label>JEE Main target date</label>
+        <input type="date" id="targetExamDate">
+      </div>
+      <div>
+        <label>Daily topics to surface</label>
+        <input type="number" id="dailyTopicCount" min="1" value="3">
+      </div>
     </div>
+    <button id="resetAll" style="margin-top:14px;">Reset everything (topics, tests, streak)</button>
+    <p class="muted" style="margin-top:6px;">All data stays in this browser (localStorage). If you clear site data, everything resets.</p>
+  </section>
 
-    <!-- DASHBOARD -->
-    <section id="dashboard" class="active">
-      <div class="grid grid-3">
-        <div class="card">
-          <h2>Today’s Target</h2>
-          <p class="muted">Focus topics pulled from your pending list.</p>
-          <ul id="todayList" class="mt-2 muted" style="list-style: disc; padding-left: 1.1rem;"></ul>
-          <p class="muted mt-2"><span class="chip">Tip</span> Finish at least one topic per subject daily.</p>
-        </div>
+</main>
 
-        <div class="card">
-          <h2>Overall Progress <span class="badge">Study Planner</span></h2>
-          <p class="muted">Quick view of topic completion across PCM.</p>
-          <div class="mt-2">
-            <p class="muted mb-1">Physics: <span id="phyProgress" class="stat-number">0%</span></p>
-            <p class="muted mb-1">Chemistry: <span id="chemProgress" class="stat-number">0%</span></p>
-            <p class="muted mb-1">Maths: <span id="mathProgress" class="stat-number">0%</span></p>
-          </div>
-        </div>
+<script>
+  // ---------- Helpers for localStorage ----------
+  function getArray(key) {
+    return JSON.parse(localStorage.getItem(key) || '[]');
+  }
+  function setArray(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
 
-        <div class="card">
-          <h2>Practice Snapshot <span class="badge">Mocks & PYQs</span></h2>
-          <p class="muted">Keep an eye on accuracy and attempts.</p>
-          <div class="mt-2">
-            <p class="muted mb-1">Tests logged: <span id="testsCount" class="stat-number">0</span></p>
-            <p class="muted mb-1">Avg. score (/300): <span id="avgScore" class="stat-number">0</span></p>
-            <p class="muted mb-1">Avg. accuracy (%): <span id="avgAccuracy" class="stat-number">0</span></p>
-          </div>
-        </div>
-      </div>
-    </section>
+  // ---------- Topics: structure & CRUD ----------
+  function getTopics() {
+    return getArray('topics');
+  }
+  function saveTopics(topics) {
+    setArray('topics', topics);
+  }
 
-    <!-- STUDY PLANNER -->
-    <section id="planner">
-      <div class="grid grid-2">
-        <div class="card">
-          <h2>Add Topic</h2>
-          <p class="muted">Choose subject & chapter; optionally add subtopics.</p>
-          <form id="topicForm">
-            <div>
-              <label for="subject">Subject</label>
-              <select id="subject" required>
-                <option value="Physics">Physics</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Maths">Maths</option>
-              </select>
-            </div>
-            <div>
-              <label for="chapterSelect">Chapter</label>
-              <select id="chapterSelect"></select>
-            </div>
-            <div>
-              <label for="topic">Extra details (optional)</label>
-              <input id="topic" type="text" placeholder="e.g. Kinematics – Relative motion, Projectile" />
-            </div>
-            <div>
-              <label for="priority">Priority</label>
-              <select id="priority">
-                <option value="High">High</option>
-                <option value="Medium" selected>Medium</option>
-                <option value="Low">Low</option>
-              </select>
-            </div>
-            <div>
-              <label for="targetDate">Target date</label>
-              <input id="targetDate" type="date" />
-            </div>
-            <button type="submit">Add to planner</button>
-          </form>
-        </div>
+  // ---------- Tests ----------
+  function getTests() {
+    return getArray('tests');
+  }
+  function saveTests(tests) {
+    setArray('tests', tests);
+  }
 
-        <div class="card">
-          <h2>Filter & Quick View</h2>
-          <div class="flex mt-1">
-            <select id="filterSubject">
-              <option value="All">All subjects</option>
-              <option value="Physics">Physics</option>
-              <option value="Chemistry">Chemistry</option>
-              <option value="Maths">Maths</option>
-            </select>
-            <select id="filterStatus">
-              <option value="All">All status</option>
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Done">Done</option>
-            </select>
-            <button id="clearAllTopics" class="secondary small">Clear all topics</button>
-          </div>
-          <p class="muted mt-2">Use filters to see what remains in each subject. Mark topics as you complete them.</p>
-        </div>
-      </div>
+  // ---------- Date helpers ----------
+  function todayStr() {
+    return new Date().toISOString().split('T')[0];
+  }
 
-      <div class="card mt-2">
-        <h2>Topic List</h2>
-        <table id="topicsTable">
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th>Topic</th>
-              <th>Priority</th>
-              <th>Target</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- PRACTICE TRACKER -->
-    <section id="practice">
-      <div class="grid grid-2">
-        <div class="card">
-          <h2>Log Mock / PYQ</h2>
-          <p class="muted">Track each test with score, accuracy, and a short reflection.</p>
-          <form id="testForm">
-            <div>
-              <label for="testType">Type</label>
-              <select id="testType">
-                <option value="Full Test">Full Test</option>
-                <option value="Physics">Physics Section</option>
-                <option value="Chemistry">Chemistry Section</option>
-                <option value="Maths">Maths Section</option>
-                <option value="PYQ Set">PYQ Set</option>
-              </select>
-            </div>
-            <div class="grid">
-              <div>
-                <label for="score">Score (out of 300)</label>
-                <input id="score" type="number" min="0" max="300" />
-              </div>
-              <div>
-                <label for="accuracy">Accuracy (%)</label>
-                <input id="accuracy" type="number" min="0" max="100" />
-              </div>
-            </div>
-            <div>
-              <label for="testDate">Date</label>
-              <input id="testDate" type="date" />
-            </div>
-            <div>
-              <label for="notes">Key mistakes / topics to revise</label>
-              <textarea id="notes" placeholder="e.g. Weak in Electrostatics numericals, Organic mechanisms confusion"></textarea>
-            </div>
-            <button type="submit">Add test</button>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2>Recent Tests</h2>
-          <p class="muted">Last few entries to quickly recall what to fix.</p>
-          <table id="testsTable">
-            <thead>
-              <tr>
-                <th>Type</th>
-                <th>Score</th>
-                <th>Acc%</th>
-                <th>Date</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ANALYSIS -->
-    <section id="analysis">
-      <div class="grid grid-3">
-        <div class="card">
-          <h2>Overall Completion</h2>
-          <p class="muted">Based on your topic list.</p>
-          <p class="muted mt-1">Total topics: <span id="anTotalTopics" class="stat-number">0</span></p>
-          <p class="muted mt-1">Done: <span id="anDoneTopics" class="stat-number">0</span></p>
-          <p class="muted mt-1">Overall %: <span id="anOverallPct" class="stat-number">0%</span></p>
-        </div>
-        <div class="card">
-          <h2>Subject‑wise %</h2>
-          <p class="muted mt-1">Physics: <span id="anPhyPct" class="stat-number">0%</span></p>
-          <p class="muted mt-1">Chemistry: <span id="anChemPct" class="stat-number">0%</span></p>
-          <p class="muted mt-1">Maths: <span id="anMathPct" class="stat-number">0%</span></p>
-        </div>
-        <div class="card">
-          <h2>Consistency</h2>
-          <p class="muted mt-1">Current study streak: <span id="anStreak" class="stat-number">0</span> days</p>
-          <p class="muted mt-1">Last active: <span id="anLastActive" class="stat-number">–</span></p>
-          <p class="muted mt-1"><span class="chip">Tip</span> Try not to break your streak.</p>
-        </div>
-      </div>
-
-      <div class="card mt-2">
-        <h2>Test Performance (last 5)</h2>
-        <p class="muted">Quick view from your most recent mocks / PYQs.</p>
-        <p class="muted mt-1">Best score: <span id="anBestScore" class="stat-number">0</span></p>
-        <p class="muted mt-1">Worst score: <span id="anWorstScore" class="stat-number">0</span></p>
-        <p class="muted mt-1">Recent avg score: <span id="anRecentAvgScore" class="stat-number">0</span></p>
-      </div>
-    </section>
-
-    <!-- SETTINGS -->
-    <section id="settings">
-      <div class="card">
-        <h2>Basic Settings</h2>
-        <p class="muted">Set your JEE Main target date and how many dashboard topics you want for a day.</p>
-        <form id="settingsForm">
-          <div class="grid">
-            <div>
-              <label for="jeeDate">JEE Main target date</label>
-              <input id="jeeDate" type="date" />
-            </div>
-            <div>
-              <label for="dailyTargetCount">Topics per day (dashboard)</label>
-              <input id="dailyTargetCount" type="number" min="1" max="10" value="3" />
-            </div>
-          </div>
-          <button type="submit" class="mt-2">Save settings</button>
-        </form>
-        <p class="muted mt-2">All data is stored in your browser (localStorage). Use the button below to reset everything.</p>
-        <button id="resetAll" class="secondary danger mt-1">Reset all data</button>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    const LS_KEYS = {
-      topics: "jee_topics",
-      tests: "jee_tests",
-      settings: "jee_settings",
-      meta: "jee_meta"
-    };
-
-    const CHAPTERS = {
-      Physics: [
-        "Units & Dimensions",
-        "Kinematics",
-        "Laws of Motion",
-        "Work, Power & Energy",
-        "Centre of Mass & Momentum",
-        "Rotation",
-        "Gravitation",
-        "Simple Harmonic Motion",
-        "Waves",
-        "Thermal Physics",
-        "Kinetic Theory of Gases",
-        "Electrostatics",
-        "Current Electricity",
-        "Magnetic Effects of Current",
-        "Electromagnetic Induction & AC",
-        "Ray Optics",
-        "Wave Optics",
-        "Modern Physics & Nuclear",
-        "Semiconductors & Communication"
-      ],
-      Chemistry: [
-        "Some Basic Concepts of Chemistry",
-        "Atomic Structure",
-        "Periodic Table",
-        "Chemical Bonding",
-        "States of Matter",
-        "Thermodynamics",
-        "Equilibrium",
-        "Redox Reactions",
-        "Electrochemistry",
-        "Chemical Kinetics",
-        "Solutions",
-        "Surface Chemistry",
-        "s-Block Elements",
-        "p-Block Elements",
-        "d- and f-Block Elements",
-        "Coordination Compounds",
-        "General Organic Chemistry",
-        "Hydrocarbons",
-        "Haloalkanes & Haloarenes",
-        "Alcohols, Phenols & Ethers",
-        "Aldehydes, Ketones & Carboxylic Acids",
-        "Amines",
-        "Biomolecules & Polymers",
-        "Environmental Chemistry"
-      ],
-      Maths: [
-        "Sets, Relations & Functions",
-        "Quadratic Equations",
-        "Sequences & Series",
-        "Binomial Theorem",
-        "Complex Numbers",
-        "Matrices & Determinants",
-        "Permutations & Combinations",
-        "Limits & Continuity",
-        "Differentiation",
-        "Applications of Derivatives",
-        "Indefinite Integration",
-        "Definite Integration",
-        "Differential Equations",
-        "Straight Lines & Pair of Lines",
-        "Circles & Parabola",
-        "Ellipse & Hyperbola",
-        "3D Geometry",
-        "Vector Algebra",
-        "Statistics & Probability",
-        "Mathematical Reasoning"
-      ]
-    };
-
-    const load = (key, fallback) => {
-      try {
-        const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : fallback;
-      } catch {
-        return fallback;
-      }
-    };
-    const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-
-    let topics = load(LS_KEYS.topics, []);
-    let tests = load(LS_KEYS.tests, []);
-    let settings = load(LS_KEYS.settings, { jeeDate: "", dailyTargetCount: 3 });
-    let meta = load(LS_KEYS.meta, { lastActive: null, streak: 0 });
-
-    const subjectSelect = document.getElementById("subject");
-    const chapterSelect = document.getElementById("chapterSelect");
-
-    function refreshChapterOptions() {
-      const subj = subjectSelect.value;
-      const list = CHAPTERS[subj] || [];
-      chapterSelect.innerHTML = "";
-      list.forEach(ch => {
-        const opt = document.createElement("option");
-        opt.value = ch;
-        opt.textContent = ch;
-        chapterSelect.appendChild(opt);
-      });
-    }
-    subjectSelect.addEventListener("change", refreshChapterOptions);
-
-    // Tabs
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll("main section").forEach(s => s.classList.remove("active"));
-        btn.classList.add("active");
-        document.getElementById(btn.dataset.tab).classList.add("active");
-        if (btn.dataset.tab === "analysis") updateAnalysis();
-      });
-    });
-
-    // Settings / days left
-    const daysLeftSpan = document.getElementById("daysLeft");
-    const jeeDateInput = document.getElementById("jeeDate");
-    const dailyTargetInput = document.getElementById("dailyTargetCount");
-
-    function updateDaysLeft() {
-      if (!settings.jeeDate) {
-        daysLeftSpan.textContent = "Set date";
-        return;
-      }
-      const today = new Date();
-      const target = new Date(settings.jeeDate + "T00:00:00");
-      const diffMs = target - today;
-      const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-      daysLeftSpan.textContent = diffDays >= 0 ? diffDays : "Over";
-    }
-
-    document.getElementById("settingsForm").addEventListener("submit", e => {
+  // ---------- Topic form submit ----------
+  const topicForm = document.getElementById('topicForm');
+  if (topicForm) {
+    topicForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      settings.jeeDate = jeeDateInput.value || "";
-      settings.dailyTargetCount = Number(dailyTargetInput.value || 3);
-      save(LS_KEYS.settings, settings);
-      updateDaysLeft();
-      updateDashboard();
-      updateAnalysis();
-      alert("Settings saved!");
-    });
+      const subject = document.getElementById('topicSubject').value;
+      const name = document.getElementById('topicName').value.trim();
+      const priority = document.getElementById('topicPriority').value;
+      const target = document.getElementById('topicTarget').value;
+      const subtopics = document.getElementById('topicSubtopics').value
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean);
 
-    document.getElementById("resetAll").addEventListener("click", () => {
-      if (!confirm("This will delete all topics, tests and settings. Continue?")) return;
-      topics = [];
-      tests = [];
-      settings = { jeeDate: "", dailyTargetCount: 3 };
-      meta = { lastActive: null, streak: 0 };
-      save(LS_KEYS.topics, topics);
-      save(LS_KEYS.tests, tests);
-      save(LS_KEYS.settings, settings);
-      save(LS_KEYS.meta, meta);
-      jeeDateInput.value = "";
-      dailyTargetInput.value = 3;
-      renderTopics();
-      renderTests();
-      updateDashboard();
-      updateAnalysis();
-      updateDaysLeft();
-      refreshChapterOptions();
-    });
+      if (!subject || !name) return;
 
-    // Streak helper
-    function markActiveToday() {
-      const todayStr = new Date().toISOString().slice(0, 10);
-      if (!meta.lastActive) {
-        meta.lastActive = todayStr;
-        meta.streak = 1;
-      } else {
-        const last = meta.lastActive;
-        if (last === todayStr) {
-          // same day, do nothing
-        } else {
-          const d1 = new Date(last + "T00:00:00");
-          const d2 = new Date(todayStr + "T00:00:00");
-          const diff = (d2 - d1) / (1000 * 60 * 60 * 24);
-          if (diff === 1) meta.streak += 1;
-          else meta.streak = 1;
-          meta.lastActive = todayStr;
-        }
-      }
-      save(LS_KEYS.meta, meta);
-    }
-
-    // Topic form
-    document.getElementById("topicForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const subject = subjectSelect.value;
-      const chapter = chapterSelect.value;
-      const extra = document.getElementById("topic").value.trim();
-      const priority = document.getElementById("priority").value;
-      const targetDate = document.getElementById("targetDate").value || "";
-      if (!chapter) return;
-      const finalTopic = extra ? chapter + " – " + extra : chapter;
-
+      const topics = getTopics();
       topics.push({
         id: Date.now(),
         subject,
-        topic: finalTopic,
+        name,
         priority,
-        targetDate,
-        status: "Pending"
+        target,
+        subtopics,
+        status: 'Pending',
+        createdAt: todayStr(),
+        doneAt: null
       });
-      save(LS_KEYS.topics, topics);
-      markActiveToday();
-      e.target.reset();
-      refreshChapterOptions();
+      saveTopics(topics);
+      topicForm.reset();
       renderTopics();
-      updateDashboard();
-      updateAnalysis();
+      updateStudyStats();
+      updateTodayTargets();
+    });
+  }
+
+  // ---------- Topic table render & filters ----------
+  const topicTableBody = document.getElementById('topicTableBody');
+  const filterSubject = document.getElementById('filterSubject');
+  const filterStatus = document.getElementById('filterStatus');
+  const filterPriority = document.getElementById('filterPriority');
+
+  function renderTopics() {
+    if (!topicTableBody) return;
+    const topics = getTopics();
+    const subjectFilter = filterSubject ? filterSubject.value : 'All';
+    const statusFilter = filterStatus ? filterStatus.value : 'All';
+    const priorityFilter = filterPriority ? filterPriority.value : 'All';
+
+    const filtered = topics.filter(t => {
+      if (subjectFilter !== 'All' && t.subject !== subjectFilter) return false;
+      if (statusFilter !== 'All' && t.status !== statusFilter) return false;
+      if (priorityFilter !== 'All' && t.priority !== priorityFilter) return false;
+      return true;
     });
 
-    const topicsTableBody = document.querySelector("#topicsTable tbody");
-    const filterSubject = document.getElementById("filterSubject");
-    const filterStatus = document.getElementById("filterStatus");
-
-    function renderTopics() {
-      const fs = filterSubject.value;
-      const fst = filterStatus.value;
-      topicsTableBody.innerHTML = "";
-      topics
-        .filter(t => (fs === "All" || t.subject === fs))
-        .filter(t => (fst === "All" || t.status === fst))
-        .forEach(t => {
-          const tr = document.createElement("tr");
-          const tagClass =
-            t.subject === "Physics" ? "tag-phy" :
-            t.subject === "Chemistry" ? "tag-chem" : "tag-math";
-          tr.innerHTML = `
-            <td><span class="tag ${tagClass}">${t.subject}</span></td>
-            <td>${t.topic}</td>
-            <td>${t.priority}</td>
-            <td>${t.targetDate || "-"}</td>
-            <td>
-              <select data-id="${t.id}" class="status-select">
-                <option ${t.status === "Pending" ? "selected" : ""}>Pending</option>
-                <option ${t.status === "In Progress" ? "selected" : ""}>In Progress</option>
-                <option ${t.status === "Done" ? "selected" : ""}>Done</option>
-              </select>
-            </td>
-            <td>
-              <button class="secondary small" data-del="${t.id}">✕</button>
-            </td>
-          `;
-          topicsTableBody.appendChild(tr);
-        });
-
-      topicsTableBody.querySelectorAll(".status-select").forEach(sel => {
-        sel.addEventListener("change", e => {
-          const id = Number(e.target.dataset.id);
-          const idx = topics.findIndex(t => t.id === id);
-          if (idx !== -1) {
-            topics[idx].status = e.target.value;
-            save(LS_KEYS.topics, topics);
-            markActiveToday();
-            updateDashboard();
-            updateAnalysis();
-          }
-        });
-      });
-
-      topicsTableBody.querySelectorAll("button[data-del]").forEach(btn => {
-        btn.addEventListener("click", e => {
-          const id = Number(e.target.dataset.del);
-          topics = topics.filter(t => t.id !== id);
-          save(LS_KEYS.topics, topics);
-          markActiveToday();
-          renderTopics();
-          updateDashboard();
-          updateAnalysis();
-        });
-      });
+    topicTableBody.innerHTML = '';
+    if (!filtered.length) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 6;
+      td.textContent = 'No topics added yet.';
+      td.className = 'muted';
+      tr.appendChild(td);
+      topicTableBody.appendChild(tr);
+      return;
     }
 
-    filterSubject.addEventListener("change", renderTopics);
-    filterStatus.addEventListener("change", renderTopics);
-    document.getElementById("clearAllTopics").addEventListener("click", () => {
-      if (!confirm("Remove all topics from the planner?")) return;
-      topics = [];
-      save(LS_KEYS.topics, topics);
-      markActiveToday();
-      renderTopics();
-      updateDashboard();
-      updateAnalysis();
+    filtered.forEach(t => {
+      const tr = document.createElement('tr');
+
+      // Subject
+      const subjectTd = document.createElement('td');
+      subjectTd.textContent = t.subject;
+      tr.appendChild(subjectTd);
+
+      // Topic + subtopics
+      const topicTd = document.createElement('td');
+      const nameDiv = document.createElement('div');
+      nameDiv.textContent = t.name;
+      topicTd.appendChild(nameDiv);
+
+      if (t.subtopics && t.subtopics.length) {
+        const subDiv = document.createElement('div');
+        subDiv.className = 'muted';
+        subDiv.style.fontSize = '0.75rem';
+        subDiv.textContent = 'Sub: ' + t.subtopics.join(', ');
+        topicTd.appendChild(subDiv);
+      }
+      tr.appendChild(topicTd);
+
+      // Priority
+      const prTd = document.createElement('td');
+      const badge = document.createElement('span');
+      badge.textContent = t.priority;
+      badge.classList.add('badge');
+      if (t.priority === 'High') badge.classList.add('badge-high');
+      else if (t.priority === 'Medium') badge.classList.add('badge-med');
+      else badge.classList.add('badge-low');
+      prTd.appendChild(badge);
+      tr.appendChild(prTd);
+
+      // Target
+      const targetTd = document.createElement('td');
+      targetTd.textContent = t.target || '–';
+      tr.appendChild(targetTd);
+
+      // Status
+      const statusTd = document.createElement('td');
+      statusTd.textContent = t.status;
+      statusTd.className = 'muted';
+      tr.appendChild(statusTd);
+
+      // Action
+      const actionTd = document.createElement('td');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = t.status === 'Done' ? 'Mark pending' : 'Mark done';
+      btn.style.padding = '4px 8px';
+      btn.style.fontSize = '0.75rem';
+      btn.addEventListener('click', () => toggleTopicStatus(t.id));
+      actionTd.appendChild(btn);
+      tr.appendChild(actionTd);
+
+      topicTableBody.appendChild(tr);
+    });
+  }
+
+  function toggleTopicStatus(id) {
+    const topics = getTopics();
+    const idx = topics.findIndex(t => t.id === id);
+    if (idx === -1) return;
+    const topic = topics[idx];
+    if (topic.status === 'Done') {
+      topic.status = 'Pending';
+      topic.doneAt = null;
+    } else {
+      topic.status = 'Done';
+      topic.doneAt = todayStr();
+    }
+    topics[idx] = topic;
+    saveTopics(topics);
+    renderTopics();
+    updateStudyStats();
+    updateTodayTargets();
+    updateStreak(topic.doneAt ? topic.doneAt : todayStr());
+  }
+
+  if (filterSubject) filterSubject.addEventListener('change', renderTopics);
+  if (filterStatus) filterStatus.addEventListener('change', renderTopics);
+  if (filterPriority) filterPriority.addEventListener('change', renderTopics);
+
+  // ---------- Study stats (overall & subject-wise) ----------
+  function updateStudyStats() {
+    const topics = getTopics();
+    const total = topics.length;
+    const done = topics.filter(t => t.status === 'Done').length;
+
+    const totalTopicsEl = document.getElementById('totalTopics');
+    const completedTopicsEl = document.getElementById('completedTopics');
+    const overallPercentEl = document.getElementById('overallPercent');
+
+    if (totalTopicsEl) totalTopicsEl.textContent = total;
+    if (completedTopicsEl) completedTopicsEl.textContent = done;
+    if (overallPercentEl) {
+      const pct = total ? ((done / total) * 100).toFixed(1) : '0';
+      overallPercentEl.textContent = pct + '%';
+    }
+
+    const subjects = ['Physics', 'Chemistry', 'Maths'];
+    const subjectPercents = { Physics: 0, Chemistry: 0, Maths: 0 };
+
+    subjects.forEach(sub => {
+      const all = topics.filter(t => t.subject === sub).length;
+      const completed = topics.filter(t => t.subject === sub && t.status === 'Done').length;
+      subjectPercents[sub] = all ? (completed / all) * 100 : 0;
     });
 
-    // Practice / tests
-    document.getElementById("testForm").addEventListener("submit", e => {
-      e.preventDefault();
-      const testType = document.getElementById("testType").value;
-      const scoreVal = document.getElementById("score").value;
-      const accuracyVal = document.getElementById("accuracy").value;
-      const testDate = document.getElementById("testDate").value || "";
-      const notes = document.getElementById("notes").value.trim();
-      const score = scoreVal ? Number(scoreVal) : null;
-      const accuracy = accuracyVal ? Number(accuracyVal) : null;
+    const phyEl = document.getElementById('phyPercent');
+    const chemEl = document.getElementById('chemPercent');
+    const mathEl = document.getElementById('mathPercent');
+    if (phyEl) phyEl.textContent = subjectPercents.Physics.toFixed(1) + '%';
+    if (chemEl) chemEl.textContent = subjectPercents.Chemistry.toFixed(1) + '%';
+    if (mathEl) mathEl.textContent = subjectPercents.Maths.toFixed(1) + '%';
+  }
 
+  // ---------- Today’s Targets (from pending list) ----------
+  function updateTodayTargets() {
+    const container = document.getElementById('todayTargets');
+    if (!container) return;
+
+    const dailyCountInput = document.getElementById('dailyTopicCount');
+    const dailyCount = dailyCountInput ? Number(dailyCountInput.value || 3) : 3;
+
+    const topics = getTopics();
+    const pending = topics.filter(t => t.status === 'Pending');
+
+    pending.sort((a, b) => {
+      const prOrder = { High: 0, Medium: 1, Low: 2 };
+      const pa = prOrder[a.priority] ?? 2;
+      const pb = prOrder[b.priority] ?? 2;
+      if (pa !== pb) return pa - pb;
+      if (a.target && b.target) return a.target.localeCompare(b.target);
+      if (a.target && !b.target) return -1;
+      if (!a.target && b.target) return 1;
+      return a.createdAt.localeCompare(b.createdAt);
+    });
+
+    const pick = pending.slice(0, dailyCount);
+
+    container.innerHTML = '';
+    if (!pick.length) {
+      const span = document.createElement('span');
+      span.className = 'muted';
+      span.textContent = 'No pending topics. Add some or mark a few back to pending.';
+      container.appendChild(span);
+      return;
+    }
+
+    pick.forEach(t => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = `${t.subject}: ${t.name}`;
+      container.appendChild(chip);
+    });
+  }
+
+  // ---------- Practice: auto accuracy field ----------
+  const totalQInput = document.getElementById('testTotalQ');
+  const correctQInput = document.getElementById('testCorrectQ');
+  const accuracyInput = document.getElementById('testAccuracy');
+
+  function updateAccuracyField() {
+    const total = parseInt(totalQInput.value, 10);
+    const correct = parseInt(correctQInput.value, 10);
+    if (!isNaN(total) && total > 0 && !isNaN(correct) && correct >= 0 && correct <= total) {
+      const acc = (correct / total) * 100;
+      accuracyInput.value = acc.toFixed(1);
+    } else {
+      accuracyInput.value = '';
+    }
+  }
+  if (totalQInput && correctQInput) {
+    totalQInput.addEventListener('input', updateAccuracyField);
+    correctQInput.addEventListener('input', updateAccuracyField);
+  }
+
+  // ---------- Practice: handle test submit ----------
+  const testForm = document.getElementById('testForm');
+  if (testForm) {
+    testForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const type = document.getElementById('testType').value;
+      const score = Number(document.getElementById('testScore').value);
+      const totalQ = Number(document.getElementById('testTotalQ').value);
+      const correctQ = Number(document.getElementById('testCorrectQ').value);
+      const reflection = document.getElementById('testReflection').value.trim();
+
+      if (!type || isNaN(score) || !totalQ || totalQ <= 0 || correctQ < 0 || correctQ > totalQ) {
+        alert('Please fill test type, score and valid question details.');
+        return;
+      }
+
+      const accuracy = (correctQ / totalQ) * 100;
+
+      const tests = getTests();
       tests.push({
         id: Date.now(),
-        testType,
+        type,
         score,
+        totalQ,
+        correctQ,
         accuracy,
-        testDate,
-        notes
+        reflection,
+        date: todayStr()
       });
-      save(LS_KEYS.tests, tests);
-      markActiveToday();
-      e.target.reset();
+      saveTests(tests);
+
+      this.reset();
+      if (accuracyInput) accuracyInput.value = '';
+
       renderTests();
-      updateDashboard();
-      updateAnalysis();
+      updatePracticeStats();
+      updateMistakeLog();
+      updateStreak(todayStr());
     });
+  }
 
-    const testsTableBody = document.querySelector("#testsTable tbody");
+  // ---------- Practice: snapshot & test performance ----------
+  function updatePracticeStats() {
+    const tests = getTests();
+    const n = tests.length;
 
-    function renderTests() {
-      testsTableBody.innerHTML = "";
-      const recent = [...tests].sort((a, b) => b.id - a.id).slice(0, 10);
-      recent.forEach(t => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${t.testType}</td>
-          <td>${t.score ?? "-"}</td>
-          <td>${t.accuracy ?? "-"}</td>
-          <td>${t.testDate || "-"}</td>
-          <td><button class="secondary small" data-deltest="${t.id}">✕</button></td>
-        `;
-        tr.title = t.notes || "";
-        testsTableBody.appendChild(tr);
-      });
+    const testsLoggedEl = document.getElementById('testsLogged');
+    const avgScoreEl = document.getElementById('avgScore');
+    const avgAccuracyEl = document.getElementById('avgAccuracy');
+    const bestScoreEl = document.getElementById('bestScore');
+    const worstScoreEl = document.getElementById('worstScore');
+    const recentAvgScoreEl = document.getElementById('recentAvgScore');
 
-      testsTableBody.querySelectorAll("button[data-deltest]").forEach(btn => {
-        btn.addEventListener("click", e => {
-          const id = Number(e.target.dataset.deltest);
-          tests = tests.filter(t => t.id !== id);
-          save(LS_KEYS.tests, tests);
-          markActiveToday();
-          renderTests();
-          updateDashboard();
-          updateAnalysis();
-        });
-      });
+    if (testsLoggedEl) testsLoggedEl.textContent = n;
+
+    let avgScore = 0, avgAcc = 0, best = 0, worst = 0, recentAvg = 0;
+    if (n) {
+      const totalScore = tests.reduce((s, t) => s + (t.score || 0), 0);
+      const totalAcc = tests.reduce((s, t) => s + (t.accuracy || 0), 0);
+      avgScore = totalScore / n;
+      avgAcc = totalAcc / n;
+      best = Math.max(...tests.map(t => t.score || 0));
+      worst = Math.min(...tests.map(t => t.score || 0));
+
+      const recent = tests.slice(-5);
+      const recentTotalScore = recent.reduce((s, t) => s + (t.score || 0), 0);
+      recentAvg = recentTotalScore / recent.length;
     }
 
-    // Dashboard numbers
-    function calculateProgressForSubject(subject) {
-      const list = topics.filter(t => t.subject === subject);
-      if (!list.length) return 0;
-      const done = list.filter(t => t.status === "Done").length;
-      return Math.round((done / list.length) * 100);
+    if (avgScoreEl) avgScoreEl.textContent = avgScore.toFixed(1);
+    if (avgAccuracyEl) avgAccuracyEl.textContent = avgAcc.toFixed(1);
+    if (bestScoreEl) bestScoreEl.textContent = best.toFixed(1);
+    if (worstScoreEl) worstScoreEl.textContent = worst.toFixed(1);
+    if (recentAvgScoreEl) recentAvgScoreEl.textContent = recentAvg.toFixed(1);
+  }
+
+  function renderTests() {
+    const tbody = document.getElementById('recentTestsBody');
+    if (!tbody) return;
+    const tests = getTests().sort((a, b) => b.id - a.id);
+    const recent = tests.slice(0, 5);
+    tbody.innerHTML = '';
+    if (!recent.length) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 4;
+      td.textContent = 'No tests logged yet.';
+      td.className = 'muted';
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+    recent.forEach(t => {
+      const tr = document.createElement('tr');
+      const typeTd = document.createElement('td');
+      const scoreTd = document.createElement('td');
+      const accTd = document.createElement('td');
+      const dateTd = document.createElement('td');
+
+      typeTd.textContent = t.type;
+      scoreTd.textContent = t.score;
+      accTd.textContent = t.accuracy.toFixed(1);
+      dateTd.textContent = t.date;
+
+      tr.appendChild(typeTd);
+      tr.appendChild(scoreTd);
+      tr.appendChild(accTd);
+      tr.appendChild(dateTd);
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ---------- Mistake log ----------
+  function updateMistakeLog() {
+    const list = document.getElementById('mistakeLogList');
+    if (!list) return;
+    const tests = getTests();
+
+    const withMistakes = tests
+      .filter(t => t.reflection && t.reflection.trim().length)
+      .sort((a, b) => b.id - a.id)
+      .slice(0, 10);
+
+    list.innerHTML = '';
+    if (!withMistakes.length) {
+      const li = document.createElement('li');
+      li.textContent = 'No logged mistakes yet. Add reflections when you log tests.';
+      list.appendChild(li);
+      return;
     }
 
-    function updateDashboard() {
-      document.getElementById("phyProgress").textContent = calculateProgressForSubject("Physics") + "%";
-      document.getElementById("chemProgress").textContent = calculateProgressForSubject("Chemistry") + "%";
-      document.getElementById("mathProgress").textContent = calculateProgressForSubject("Maths") + "%";
+    withMistakes.forEach(t => {
+      const li = document.createElement('li');
+      li.textContent = `${t.date} • ${t.type} • Acc: ${t.accuracy.toFixed(1)}% • ${t.reflection}`;
+      list.appendChild(li);
+    });
+  }
 
-      document.getElementById("testsCount").textContent = tests.length;
-      if (!tests.length) {
-        document.getElementById("avgScore").textContent = 0;
-        document.getElementById("avgAccuracy").textContent = 0;
-      } else {
-        const avg = (arr, key) =>
-          Math.round(
-            arr.reduce((sum, t) => sum + (typeof t[key] === "number" ? t[key] : 0), 0) /
-            arr.filter(t => typeof t[key] === "number").length
-          ) || 0;
-        document.getElementById("avgScore").textContent = avg(tests, "score");
-        document.getElementById("avgAccuracy").textContent = avg(tests, "accuracy");
+  // ---------- Streak tracking ----------
+  function getMeta() {
+    return JSON.parse(localStorage.getItem('meta') || '{"streak":0,"lastActive":null}');
+  }
+  function saveMeta(meta) {
+    localStorage.setItem('meta', JSON.stringify(meta));
+  }
+
+  function updateStreak(actionDateStr) {
+    if (!actionDateStr) return;
+    const meta = getMeta();
+    const today = actionDateStr;
+    const last = meta.lastActive;
+
+    if (!last) {
+      meta.streak = 1;
+    } else {
+      const lastDate = new Date(last);
+      const currDate = new Date(today);
+      const diffDays = Math.floor((currDate - lastDate) / (1000 * 60 * 60 * 24));
+      if (diffDays === 0) {
+        // same day; streak unchanged
+      } else if (diffDays === 1) {
+        meta.streak = (meta.streak || 0) + 1;
+      } else if (diffDays > 1) {
+        meta.streak = 1;
       }
-
-      const todayList = document.getElementById("todayList");
-      todayList.innerHTML = "";
-      const pending = topics.filter(t => t.status !== "Done");
-      const dailyCount = settings.dailyTargetCount || 3;
-      const selected = pending.slice(0, dailyCount);
-      if (!selected.length) {
-        const li = document.createElement("li");
-        li.textContent = "No pending topics. Add more in the Study Planner.";
-        todayList.appendChild(li);
-      } else {
-        selected.forEach(t => {
-          const li = document.createElement("li");
-          li.textContent = `${t.subject}: ${t.topic} (${t.priority})`;
-          todayList.appendChild(li);
-        });
-      }
     }
 
-    // Analysis section
-    function updateAnalysis() {
-      const total = topics.length;
-      const done = topics.filter(t => t.status === "Done").length;
-      document.getElementById("anTotalTopics").textContent = total;
-      document.getElementById("anDoneTopics").textContent = done;
-      document.getElementById("anOverallPct").textContent = total ? Math.round((done / total) * 100) + "%" : "0%";
+    meta.lastActive = today;
+    saveMeta(meta);
+    renderStreak();
+  }
 
-      document.getElementById("anPhyPct").textContent = calculateProgressForSubject("Physics") + "%";
-      document.getElementById("anChemPct").textContent = calculateProgressForSubject("Chemistry") + "%";
-      document.getElementById("anMathPct").textContent = calculateProgressForSubject("Maths") + "%";
+  function renderStreak() {
+    const meta = getMeta();
+    const streakEl = document.getElementById('streakDays');
+    const lastEl = document.getElementById('lastActive');
+    if (streakEl) streakEl.textContent = (meta.streak || 0) + ' days';
+    if (lastEl) lastEl.textContent = meta.lastActive || '–';
+  }
 
-      document.getElementById("anStreak").textContent = meta.streak || 0;
-      document.getElementById("anLastActive").textContent = meta.lastActive || "–";
+  // ---------- Settings: daily topics & exam date ----------
+  const dailyTopicCountInput = document.getElementById('dailyTopicCount');
+  const targetExamDateInput = document.getElementById('targetExamDate');
 
-      const recent = [...tests].sort((a, b) => b.id - a.id).slice(0, 5);
-      if (!recent.length) {
-        document.getElementById("anBestScore").textContent = 0;
-        document.getElementById("anWorstScore").textContent = 0;
-        document.getElementById("anRecentAvgScore").textContent = 0;
-      } else {
-        const scores = recent.map(t => typeof t.score === "number" ? t.score : 0);
-        const best = Math.max(...scores);
-        const worst = Math.min(...scores);
-        const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-        document.getElementById("anBestScore").textContent = best;
-        document.getElementById("anWorstScore").textContent = worst;
-        document.getElementById("anRecentAvgScore").textContent = avg;
-      }
+  function loadSettings() {
+    const settings = JSON.parse(localStorage.getItem('settings') || '{}');
+    if (settings.dailyTopicCount && dailyTopicCountInput) {
+      dailyTopicCountInput.value = settings.dailyTopicCount;
     }
+    if (settings.targetExamDate && targetExamDateInput) {
+      targetExamDateInput.value = settings.targetExamDate;
+    }
+  }
 
-    // Initial load
-    function init() {
-      jeeDateInput.value = settings.jeeDate || "";
-      dailyTargetInput.value = settings.dailyTargetCount || 3;
-      refreshChapterOptions();
+  function saveSettings() {
+    const s = {
+      dailyTopicCount: dailyTopicCountInput ? Number(dailyTopicCountInput.value || 3) : 3,
+      targetExamDate: targetExamDateInput ? targetExamDateInput.value : null
+    };
+    localStorage.setItem('settings', JSON.stringify(s));
+    updateTodayTargets();
+  }
+
+  if (dailyTopicCountInput) dailyTopicCountInput.addEventListener('change', saveSettings);
+  if (targetExamDateInput) targetExamDateInput.addEventListener('change', saveSettings);
+
+  // ---------- Reset all ----------
+  const resetBtn = document.getElementById('resetAll');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      if (!confirm('Reset topics, tests, streak and settings?')) return;
+      localStorage.removeItem('topics');
+      localStorage.removeItem('tests');
+      localStorage.removeItem('meta');
+      localStorage.removeItem('settings');
       renderTopics();
+      updateStudyStats();
+      updateTodayTargets();
       renderTests();
-      updateDashboard();
-      updateAnalysis();
-      updateDaysLeft();
+      updatePracticeStats();
+      updateMistakeLog();
+      renderStreak();
+    });
+  }
+
+  // ---------- Initial load ----------
+  document.addEventListener('DOMContentLoaded', () => {
+    const todayDateEl = document.getElementById('todayDate');
+    if (todayDateEl) {
+      const d = new Date();
+      todayDateEl.textContent = d.toLocaleDateString(undefined, {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short'
+      });
     }
 
-    init();
-  </script>
+    loadSettings();
+    renderTopics();
+    updateStudyStats();
+    updateTodayTargets();
+    renderTests();
+    updatePracticeStats();
+    updateMistakeLog();
+    renderStreak();
+  });
+</script>
+
 </body>
 </html>
